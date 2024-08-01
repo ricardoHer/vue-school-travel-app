@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import sourceData from "@/data.json";
 
 const routes = [
   {
@@ -12,6 +13,19 @@ const routes = [
     name: "destination.show",
     component: () => import("@/views/DestinationShow.vue"),
     props: (route) => ({ ...route.params, id: parseInt(route.params.id) }),
+    beforeEnter(to) {
+      const exist = sourceData.destinations.find(
+        (destination) => destination.id === parseInt(to.params.id)
+      );
+      if (!exist) {
+        return {
+          name: "NotFound",
+          params: { pathMatch: to.path.split("/").slice(1) },
+          query: to.query,
+          hash: to.hash,
+        };
+      }
+    },
     children: [
       {
         path: ":experienceSlug",
@@ -21,11 +35,24 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("@/views/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    return (
+      savedPosition ||
+      new Promise((resolve) => {
+        setTimeout(() => resolve({ top: 0 }), 300);
+      })
+    );
+  },
 });
 
 export default router;
