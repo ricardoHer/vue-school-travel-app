@@ -3,7 +3,13 @@
     <form class="form" @submit.prevent="login">
       <h1>Login</h1>
       <label for="email">Email:</label>
-      <input class="input" type="email" id="email" v-model="email" required />
+      <input
+        class="input"
+        type="email"
+        id="email"
+        v-model="username"
+        required
+      />
       <label for="password">Password:</label>
       <input
         class="input"
@@ -18,20 +24,23 @@
 </template>
 
 <script>
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
 export default {
-  data() {
-    return {
-      email: "",
-      password: "",
+  setup() {
+    const username = ref("");
+    const password = ref("");
+    const router = useRouter();
+    const route = useRoute();
+
+    const login = () => {
+      window.user = username.value;
+      console.log("UserName: ", username.value);
+      const redirectPath = route.query.redirect || "/protected";
+      router.push(redirectPath);
     };
-  },
-  methods: {
-    login() {
-      // Perform login logic here
-      console.log("Logging in...");
-      window.user = this.email;
-      this.$router.push({ name: "protected" });
-    },
+    return { username, password, login };
   },
 };
 </script>

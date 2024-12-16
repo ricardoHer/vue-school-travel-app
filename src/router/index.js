@@ -7,6 +7,7 @@ const routes = [
     path: "/",
     name: "home",
     component: HomeView,
+    alias: "/home",
   },
   {
     path: "/login",
@@ -16,7 +17,21 @@ const routes = [
   {
     path: "/protected",
     name: "protected",
-    component: () => import("@/views/ProtectedArea.vue"),
+    components: {
+      default: () => import("@/views/ProtectedArea.vue"),
+      LeftSidebar: () => import("@/components/LeftSidebar.vue"),
+    },
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/invoices",
+    name: "invoices",
+    components: {
+      default: () => import("@/views/ProtectedInvoices.vue"),
+      LeftSidebar: () => import("@/components/LeftSidebar.vue"),
+    },
     meta: {
       requiresAuth: true,
     },

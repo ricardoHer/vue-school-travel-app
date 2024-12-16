@@ -1,10 +1,19 @@
 <template>
   <TheNavigation />
   <div class="container">
+    <router-view
+      v-slot="{ Component }"
+      class="view left-sidebar"
+      name="LeftSidebar"
+    >
+      <transition name="fade" mode="out-in">
+        <component :is="Component" :key="$route.path"></component>
+      </transition>
+    </router-view>
     <!-- The :key value will force the Vue to reload the page, to have a fresh information -->
     <!-- :key="$route.path" -->
-    <router-view v-slot="{ Component }">
-      <transition name="slide" mode="out-in">
+    <router-view v-slot="{ Component }" class="main-view">
+      <transition name="fade" mode="out-in">
         <component :is="Component" :key="$route.path"></component>
       </transition>
     </router-view>
@@ -20,18 +29,29 @@ export default {
 };
 </script>
 <style lang="css">
-.slide-enter-active,
-.slide-leave-active {
-  transition: opacity 0.4s, transform 0.4s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
 }
-.slide-enter-from,
-.slide-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
-  transform: translateX(-50%);
 }
 
 .moveUp-entter-active {
   animation: fadeIn 0.4s ease-in;
+}
+
+.container {
+  display: flex;
+}
+
+.left-sidebar {
+  width: 20%;
+}
+
+.main-view {
+  width: 100%;
 }
 
 /* @keyframes fadeIn {
