@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <section v-if="destination" class="destination">
+  <div v-if="destination">
+    <section class="destination">
       <h1>{{ destination.name }}</h1>
       <GoBack />
       <div class="destination-details">
@@ -40,11 +40,32 @@ export default {
     id: { type: Number, required: true },
   },
   computed: {
+    destinationId() {
+      return parseInt(this.$route.params.id);
+    },
     destination() {
       return sourceData.destinations.find(
-        (destination) => destination.id === this.id
+        (destination) => destination.id == this.destinationId
       );
     },
   },
+  // async created() {
+  //   // using the watch method to fetch the destination data
+  //   // this.$watch(
+  //   //   () => this.$route.params,
+  //   //   () => {
+  //   //     this.fetchDestination();
+  //   //   },
+  //   //   { immediate: true }
+  //   // );
+  // },
+  // methods: {
+  //   async fetchDestination() {
+  //     const respose = await fetch(
+  //       `https://travel-dummy-api.netlify.app/${this.$route.params.slug}.json`
+  //     );
+  //     this.destination = await respose.json();
+  //   },
+  // },
 };
 </script>

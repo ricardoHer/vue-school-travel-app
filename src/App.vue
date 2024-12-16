@@ -1,6 +1,8 @@
 <template>
   <TheNavigation />
   <div class="container">
+    <!-- The :key value will force the Vue to reload the page, to have a fresh information -->
+    <!-- :key="$route.path" -->
     <router-view v-slot="{ Component }">
       <transition name="slide" mode="out-in">
         <component :is="Component" :key="$route.path"></component>

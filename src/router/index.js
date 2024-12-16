@@ -9,6 +9,19 @@ const routes = [
     component: HomeView,
   },
   {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/LoginPage.vue"),
+  },
+  {
+    path: "/protected",
+    name: "protected",
+    component: () => import("@/views/ProtectedArea.vue"),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: "/destination/:id/:slug",
     name: "destination.show",
     component: () => import("@/views/DestinationShow.vue"),
@@ -49,10 +62,17 @@ const router = createRouter({
     return (
       savedPosition ||
       new Promise((resolve) => {
-        setTimeout(() => resolve({ top: 0 }), 300);
+        setTimeout(() => resolve({ top: 0, behavior: "smooth" }), 300);
       })
     );
   },
+});
+
+router.beforeEach((to) => {
+  if (to.meta.requiresAuth && !window.user) {
+    console.log("This route requires auth");
+    return { name: "login" };
+  }
 });
 
 export default router;
